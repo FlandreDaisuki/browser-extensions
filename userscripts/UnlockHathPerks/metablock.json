@@ -15,7 +15,7 @@
     "https://e-hentai.org/*",
     "https://exhentai.org/*"
   ],
-  "version": "3.0.2",
+  "version": "3.0.3",
   "grant": [
     "GM_getValue",
     "GM_setValue"

@@ -27,7 +27,9 @@ if (uhpConfig.abg) {
 // #region More Thumbs
 if (uhpConfig.mt) {
   (async() => {
+    const u = new URL(location);
     if (!location.pathname.startsWith('/g/')){ return; }
+    if (u.searchParams.get('report') === 'select'){ return; }
 
     const NEXT_PAGE_SELECTOR = '.ptt td:last-child > a';
     const IMAGE_PARENT_SELECTOR = '#gdt';
