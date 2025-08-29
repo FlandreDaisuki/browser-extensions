@@ -30,6 +30,7 @@ if (uhpConfig.mt) {
     const u = new URL(location);
     if (!location.pathname.startsWith('/g/')){ return; }
     if (u.searchParams.get('report') === 'select'){ return; }
+    if (u.searchParams.get('act') === 'expunge'){ return; }
 
     const NEXT_PAGE_SELECTOR = '.ptt td:last-child > a';
     const IMAGE_PARENT_SELECTOR = '#gdt';

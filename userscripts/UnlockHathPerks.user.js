@@ -6,7 +6,7 @@
 // @description:zh-TW 解鎖 Hath Perks 及增加一些小工具
 // @description:zh-CN 解锁 Hath Perks 及增加一些小工具
 // @namespace   https://flandre.in/github
-// @version     3.0.3
+// @version     3.0.4
 // @match       https://e-hentai.org/*
 // @match       https://exhentai.org/*
 // @icon        https://i.imgur.com/JsU0vTd.png
@@ -80,6 +80,7 @@
       const u = new URL(location);
       if (!location.pathname.startsWith('/g/')){ return; }
       if (u.searchParams.get('report') === 'select'){ return; }
+      if (u.searchParams.get('act') === 'expunge'){ return; }
 
       const NEXT_PAGE_SELECTOR = '.ptt td:last-child > a';
       const IMAGE_PARENT_SELECTOR = '#gdt';
