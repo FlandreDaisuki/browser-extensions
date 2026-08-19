@@ -34,7 +34,80 @@ if (uhpConfig.mt) {
 
     const imgParentEl = $(IMAGE_PARENT_SELECTOR);
     if (!imgParentEl) { return console.error('No imgParentEl'); }
-    imgParentEl.innerHTML = '';
+
+    const paginationEl = $('table.ptb');
+    const commentsAnchorEl = $('a[name="comments"]');
+    if (!paginationEl) { return console.error('No paginationEl'); }
+    if (!commentsAnchorEl) { return console.error('No commentsAnchorEl'); }
+
+    const initialNextEl = $(NEXT_PAGE_SELECTOR);
+    const initialNextUrl = initialNextEl?.href ?? '';
+
+    const commentCount = $$('#cdiv > .c1').length;
+    const moreThumbsControlsEl = $el('div', {
+      className: (location.host === 'exhentai.org') ? 'dark' : '',
+      id: '🔓-more-thumbs-controls',
+    });
+    moreThumbsControlsEl.innerHTML = `
+      <span id="🔓-more-thumbs-status" aria-live="polite"></span>
+      <button id="🔓-view-comments" type="button">
+        Comments${commentCount ? ` (${commentCount})` : ''} ↓
+      </button>
+      <button id="🔓-resume-thumbs" type="button" hidden>Resume thumbs ↑</button>
+    `;
+    document.body.appendChild(moreThumbsControlsEl);
+
+    const statusEl = $('#🔓-more-thumbs-status');
+    const viewCommentsEl = $('#🔓-view-comments');
+    const resumeThumbsEl = $('#🔓-resume-thumbs');
+
+    const isCommentHash = (hash) => (
+      hash === '#comments'
+      || hash === '#ulcomment'
+      || /^#c\d+$/.test(hash)
+    );
+    const getCommentHashTarget = () => {
+      const name = location.hash.slice(1);
+      return document.getElementById(name)
+        ?? document.getElementsByName(name)[0]
+        ?? commentsAnchorEl;
+    };
+    const getThumbCount = () => Array.from(imgParentEl.children)
+      .filter((imgEl) => !imgEl.classList.contains('c'))
+      .length;
+
+    let isPaused = isCommentHash(location.hash);
+    let hasMore = Boolean(initialNextUrl);
+    let isIntersecting = false;
+    let isLoading = false;
+    let loadFailed = false;
+    let navigationIntent = 0;
+    let currentLoadPromise = Promise.resolve();
+    let ob;
+
+    const updateControls = () => {
+      if (loadFailed) {
+        moreThumbsControlsEl.dataset.state = 'error';
+        statusEl.textContent = `Stopped · ${getThumbCount()} thumbnails`;
+      }
+      else if (!hasMore) {
+        moreThumbsControlsEl.dataset.state = 'complete';
+        statusEl.textContent = `All ${getThumbCount()} thumbnails`;
+      }
+      else if (isPaused) {
+        moreThumbsControlsEl.dataset.state = 'paused';
+        statusEl.textContent = `Paused · ${getThumbCount()} thumbnails`;
+      }
+      else if (isLoading) {
+        moreThumbsControlsEl.dataset.state = 'loading';
+        statusEl.textContent = `Loading · ${getThumbCount()} thumbnails`;
+      }
+      else {
+        moreThumbsControlsEl.dataset.state = 'ready';
+        statusEl.textContent = `${getThumbCount()} thumbnails`;
+      }
+      resumeThumbsEl.hidden = !isPaused || !hasMore;
+    };
 
     /** @param {string} initUrl */
     async function* newPagedImgElsGen(initUrl) {
@@ -48,48 +121,115 @@ if (uhpConfig.mt) {
         url = '';
         imgEls = [];
 
-        if (resp.ok) {
-          const html = await resp.text();
-          const docEl = (new DOMParser())
-            .parseFromString(html, 'text/html')
-            .documentElement;
-          imgEls = Array.from($find(docEl, IMAGE_PARENT_SELECTOR)?.children ?? []);
-
-          const nextEl = $find(docEl, NEXT_PAGE_SELECTOR);
-          url = nextEl?.href ?? '';
+        if (!resp.ok) {
+          throw new Error(`Could not load thumbnails: HTTP ${resp.status}`);
         }
+        const html = await resp.text();
+        const docEl = (new DOMParser())
+          .parseFromString(html, 'text/html')
+          .documentElement;
+        imgEls = Array.from($find(docEl, IMAGE_PARENT_SELECTOR)?.children ?? []);
 
-        yield imgEls;
+        const nextEl = $find(docEl, NEXT_PAGE_SELECTOR);
+        url = nextEl?.href ?? '';
+
+        yield { hasNextPage: Boolean(url), imgEls };
       }
 
-      return [];
+      return { hasNextPage: false, imgEls: [] };
     }
 
-    const pagedImgEls = newPagedImgElsGen(location.href);
+    const pagedImgEls = newPagedImgElsGen(initialNextUrl);
 
-    const replaceResult = async (ob) => {
+    const appendNextPage = async () => {
       const pagedImgElsResult = await pagedImgEls.next();
       if (pagedImgElsResult.done) {
-        return ob.disconnect();
+        hasMore = false;
+        return;
       }
-      for (const imgEl of pagedImgElsResult.value) {
+      for (const imgEl of pagedImgElsResult.value.imgEls) {
         if (!imgEl.classList.contains('c')) {
           imgParentEl.appendChild(imgEl);
         }
       }
+      hasMore = pagedImgElsResult.value.hasNextPage;
     };
-    let isIntersecting = false;
-    const ob = new IntersectionObserver(async (entries) => {
+
+    const loadVisiblePages = async () => {
+      isLoading = true;
+      updateControls();
+      try {
+        while (true) {
+          if (!isIntersecting || isPaused || !hasMore) { break; }
+          await appendNextPage();
+          updateControls();
+          if (!isPaused && hasMore) {
+            await sleep(300);
+          }
+        }
+      }
+      catch (error) {
+        loadFailed = true;
+        hasMore = false;
+        console.error(error);
+      }
+      finally {
+        isLoading = false;
+        if (!hasMore) {
+          ob.disconnect();
+        }
+        updateControls();
+      }
+    };
+
+    const startLoading = () => {
+      if (isLoading || isPaused || !hasMore) { return; }
+      currentLoadPromise = loadVisiblePages();
+    };
+
+    ob = new IntersectionObserver((entries) => {
       isIntersecting = entries[0].isIntersecting;
       if (isIntersecting) {
-        do {
-          await replaceResult(ob);
-          await sleep(300);
-          if (!isIntersecting) { break; }
-        } while (true);
+        startLoading();
       }
     });
-    ob.observe($('table.ptb'));
+
+    const pauseAndViewComments = async (targetEl, behavior = 'smooth') => {
+      const intent = ++navigationIntent;
+      isPaused = true;
+      isIntersecting = false;
+      ob.disconnect();
+      updateControls();
+
+      // Let an in-flight append settle so it cannot move the comments afterward.
+      await currentLoadPromise;
+      if (intent !== navigationIntent || !isPaused) { return; }
+      targetEl.scrollIntoView({ behavior, block: 'start' });
+    };
+
+    const resumeMoreThumbs = () => {
+      navigationIntent += 1;
+      isPaused = false;
+      updateControls();
+      ob.observe(paginationEl);
+      paginationEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    viewCommentsEl.onclick = () => pauseAndViewComments(commentsAnchorEl);
+    resumeThumbsEl.onclick = resumeMoreThumbs;
+    window.addEventListener('hashchange', () => {
+      if (isCommentHash(location.hash)) {
+        pauseAndViewComments(getCommentHashTarget(), 'auto');
+      }
+    });
+
+    updateControls();
+    if (isPaused) {
+      requestAnimationFrame(() => pauseAndViewComments(getCommentHashTarget(), 'auto'));
+    }
+    else if (hasMore) {
+      ob.observe(paginationEl);
+    }
   })();
 }
 // #endregion More Thumbs
@@ -306,6 +446,123 @@ $style(`
   font-size: 3rem;
   clear: both;
   padding: 2rem 0;
+}
+
+#🔓-more-thumbs-controls {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.65rem 0.75rem;
+  border: 2px solid #7f1d1d;
+  border-radius: 0.75rem;
+  color: #3f0b0b;
+  background: #fffaf0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+
+  &.dark {
+    border-color: #f0b429;
+    color: #fff;
+    background: #181a1f;
+  }
+
+  &[data-state="complete"] {
+    border-color: #16803c;
+  }
+
+  &.dark[data-state="complete"] {
+    border-color: #4ade80;
+  }
+
+  &[data-state="error"] {
+    border-color: #dc2626;
+  }
+
+  > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+
+  > span::before {
+    display: inline-block;
+    margin-right: 0.4rem;
+    color: #7f1d1d;
+    content: "●";
+  }
+
+  &[data-state="loading"] > span::before {
+    color: #ca8a04;
+    content: "↻";
+    animation: uhp-spin 1s linear infinite;
+  }
+
+  &[data-state="paused"] > span::before {
+    color: #ca8a04;
+    content: "⏸";
+  }
+
+  &[data-state="complete"] > span::before {
+    color: #16803c;
+    content: "✓";
+  }
+
+  &.dark[data-state="complete"] > span::before {
+    color: #4ade80;
+  }
+
+  &[data-state="error"] > span::before {
+    color: #dc2626;
+    content: "!";
+  }
+
+  > button {
+    flex: none;
+    padding: 0.4rem 0.65rem;
+    border: 1px solid #7f1d1d;
+    border-radius: 0.45rem;
+    color: #fff;
+    background: #7f1d1d;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  > button:hover {
+    filter: brightness(1.2);
+  }
+
+  &.dark > button {
+    border-color: #f0b429;
+    color: #181a1f;
+    background: #f0b429;
+  }
+
+  > #🔓-resume-thumbs {
+    border-color: #0369a1;
+    background: #0369a1;
+  }
+
+  &.dark > #🔓-resume-thumbs {
+    border-color: #38bdf8;
+    background: #38bdf8;
+  }
+
+  > button[hidden] {
+    display: none;
+  }
+}
+
+@keyframes uhp-spin {
+  to { transform: rotate(360deg); }
 }
 
 #🔓-dialog {
