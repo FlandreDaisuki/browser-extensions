@@ -1,0 +1,19 @@
+{
+  "name": "ExAdvancedSearchMemo",
+  "description": "Memorize your eh search query",
+  "namespace": "https://flandre.in/github",
+  "author": "FlandreDaisuki",
+  "match": [
+    "*://e-hentai.org/*",
+    "*://exhentai.org/*"
+  ],
+  "version": "1.0.4",
+  "grant":[
+    "GM_getValue",
+    "GM.getValue",
+    "GM_setValue",
+    "GM.setValue"
+  ],
+  "supportURL":"https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
+  "homepageURL":"https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/ExAdvancedSearchMemo/README.md"
+}

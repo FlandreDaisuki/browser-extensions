@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "@flandredaisuki"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "greasemonkey": true,
+    "node": true,
+    "shared-node-browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "globals": {
+    "globalThis": true
+  },
+  "ignorePatterns": [
+    "**/dist/**"
+  ]
+}

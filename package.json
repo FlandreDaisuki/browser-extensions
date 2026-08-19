@@ -1,0 +1,13 @@
+{
+  "name": "my-browser-extensions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter './userscripts/*' run build",
+    "lint": "eslint userscripts --ext .js"
+  },
+  "devDependencies": {
+    "@flandredaisuki/eslint-config": "^0.0.2",
+    "eslint": "^8.51.0"
+  }
+}

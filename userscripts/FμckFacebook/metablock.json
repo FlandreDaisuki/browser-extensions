@@ -1,0 +1,27 @@
+{
+  "name": "Fμck Facebook",
+  "description": "Remove all Facebook shit",
+  "namespace": "https://flandre.in/github",
+  "author": "FlandreDaisuki",
+  "match": [
+    "https://*.facebook.com/*"
+  ],
+  "require": [
+    "https://unpkg.com/winkblue@0.1.1/dist/winkblue.umd.js"
+  ],
+  "version": "1.7.0",
+  "grant": [
+    "GM_getValue",
+    "GM.getValue",
+    "GM_setValue",
+    "GM.setValue",
+    "GM_getResourceText",
+    "GM.getResourceText"
+  ],
+  "resource": {
+    "faceBullshit": "https://raw.githubusercontent.com/FlandreDaisuki/My-Browser-Extensions/main/userscripts/F%CE%BCckFacebook/FaceBullshit.user.css"
+  },
+  "noframes": true,
+  "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
+  "homepageURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/F%CE%BCckFacebook/README.md"
+}

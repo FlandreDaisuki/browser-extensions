@@ -1,0 +1,28 @@
+{
+  "name": {
+    "default": "Unlock Hath Perks",
+    "zh-TW": "解鎖 Hath Perks",
+    "zh-CN": "解锁 Hath Perks"
+  },
+  "description": {
+    "default": "Unlock Hath Perks and add other helpers",
+    "zh-TW": "解鎖 Hath Perks 及增加一些小工具",
+    "zh-CN": "解锁 Hath Perks 及增加一些小工具"
+  },
+  "namespace": "https://flandre.in/github",
+  "author": "FlandreDaisuki",
+  "match": [
+    "https://e-hentai.org/*",
+    "https://exhentai.org/*"
+  ],
+  "version": "3.0.4",
+  "grant": [
+    "GM_getValue",
+    "GM_setValue"
+  ],
+  "icon": "https://i.imgur.com/JsU0vTd.png",
+  "noframes": true,
+  "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
+  "homepageURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/UnlockHathPerks/README.md",
+  "license": "MPLv2"
+}
