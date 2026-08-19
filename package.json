@@ -1,5 +1,5 @@
 {
-  "name": "my-browser-extensions",
+  "name": "browser-extensions",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@11.22.0",

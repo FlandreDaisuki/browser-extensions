@@ -6,7 +6,7 @@ pnpm workspace containing three userscripts:
 - [Fμck Facebook](userscripts/FμckFacebook)
 - [Unlock Hath Perks](userscripts/UnlockHathPerks)
 
-Install published builds from [GitHub Pages](https://flandredaisuki.github.io/My-Browser-Extensions/).
+Install published builds from [GitHub Pages](https://flandredaisuki.github.io/browser-extensions/).
 
 ## Development
 

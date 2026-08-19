@@ -7,7 +7,7 @@ const { winkblue } = Winkblue;
 
 /*
 推薦與以下樣式一起使用，效果更佳
-https://github.com/FlandreDaisuki/My-Browser-Extensions/tree/main/userscripts/F%CE%BCckFacebook/FaceBullshit.user.css
+https://github.com/FlandreDaisuki/browser-extensions/tree/main/userscripts/F%CE%BCckFacebook/FaceBullshit.user.css
 */
 
 const faceBullshitStylesheetText = $getResourceText('faceBullshit');

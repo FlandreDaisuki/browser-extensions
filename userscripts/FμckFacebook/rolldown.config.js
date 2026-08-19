@@ -6,7 +6,7 @@ import { replacePlugin } from 'rolldown/plugins';
 import metablock from 'rollup-plugin-userscript-metablock';
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
-const DISTRIBUTION_BASE_URL = 'https://flandredaisuki.github.io/My-Browser-Extensions';
+const DISTRIBUTION_BASE_URL = 'https://flandredaisuki.github.io/browser-extensions';
 
 export default defineConfig([{
   input: './index.js',

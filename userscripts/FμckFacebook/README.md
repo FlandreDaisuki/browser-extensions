@@ -1,8 +1,8 @@
 # Fμck Facebook
 
-- Normal browsers: [install Fμck Facebook](https://flandredaisuki.github.io/My-Browser-Extensions/fuck-facebook.user.js)
+- Normal browsers: [install Fμck Facebook](https://flandredaisuki.github.io/browser-extensions/fuck-facebook.user.js)
 - <ruby>Safari<rp>(</rp><rt>Modern IE</rt><rp>)</rp></ruby> with [quoid/userscripts](https://github.com/quoid/userscripts)
-  - [install Fμck Facebook for iOS](https://flandredaisuki.github.io/My-Browser-Extensions/fuck-facebook-ios.user.js)
+  - [install Fμck Facebook for iOS](https://flandredaisuki.github.io/browser-extensions/fuck-facebook-ios.user.js)
 
 ## Features
 

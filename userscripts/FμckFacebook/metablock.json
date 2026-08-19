@@ -19,9 +19,9 @@
     "GM.getResourceText"
   ],
   "resource": {
-    "faceBullshit": "https://flandredaisuki.github.io/My-Browser-Extensions/face-bullshit.user.css"
+    "faceBullshit": "https://flandredaisuki.github.io/browser-extensions/face-bullshit.user.css"
   },
   "noframes": true,
-  "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
-  "homepageURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/F%CE%BCckFacebook/README.md"
+  "supportURL": "https://github.com/FlandreDaisuki/browser-extensions/issues",
+  "homepageURL": "https://github.com/FlandreDaisuki/browser-extensions/blob/main/userscripts/F%CE%BCckFacebook/README.md"
 }

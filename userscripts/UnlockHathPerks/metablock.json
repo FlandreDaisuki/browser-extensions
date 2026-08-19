@@ -22,9 +22,9 @@
   ],
   "icon": "https://i.imgur.com/JsU0vTd.png",
   "noframes": true,
-  "updateURL": "https://flandredaisuki.github.io/My-Browser-Extensions/unlock-hath-perks.user.js",
-  "downloadURL": "https://flandredaisuki.github.io/My-Browser-Extensions/unlock-hath-perks.user.js",
-  "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
-  "homepageURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/UnlockHathPerks/README.md",
+  "updateURL": "https://flandredaisuki.github.io/browser-extensions/unlock-hath-perks.user.js",
+  "downloadURL": "https://flandredaisuki.github.io/browser-extensions/unlock-hath-perks.user.js",
+  "supportURL": "https://github.com/FlandreDaisuki/browser-extensions/issues",
+  "homepageURL": "https://github.com/FlandreDaisuki/browser-extensions/blob/main/userscripts/UnlockHathPerks/README.md",
   "license": "MPLv2"
 }
