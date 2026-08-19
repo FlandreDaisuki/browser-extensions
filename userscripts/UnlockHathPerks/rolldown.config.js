@@ -1,10 +1,9 @@
-import commonjs from '@rollup/plugin-commonjs';
+import { defineConfig } from 'rolldown';
 import metablock from 'rollup-plugin-userscript-metablock';
 
-export default {
+export default defineConfig({
   input: './index.js',
   plugins: [
-    commonjs(),
     metablock({
       order: [
         'name',
@@ -26,4 +25,4 @@ export default {
     file: 'dist/UnlockHathPerks.user.js',
     format: 'iife',
   },
-};
+});

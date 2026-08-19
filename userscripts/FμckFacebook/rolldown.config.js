@@ -1,16 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import commonjs from '@rollup/plugin-commonjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'rolldown';
+import { replacePlugin } from 'rolldown/plugins';
 import metablock from 'rollup-plugin-userscript-metablock';
-import replace from '@rollup/plugin-replace';
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
 
-export default [{
+export default defineConfig([{
   input: './index.js',
   plugins: [
-    commonjs(),
     metablock({
       order: [
         'name',
@@ -35,19 +34,13 @@ export default [{
 }, {
   input: './index.js',
   plugins: [
-    replace({
+    replacePlugin({
+      '$getResourceText(\'faceBullshit\')': JSON.stringify(
+        fs.readFileSync(path.join(DIRNAME, 'FaceBullshit.user.css'), 'utf8'),
+      ),
+    }, {
+      delimiters: ['', ''],
       preventAssignment: true,
-      delimiters: ['\\$', '\\('],
-      values: {
-        getResourceText: '(',
-      },
-    }),
-    replace({
-      preventAssignment: true,
-      delimiters: ['\\(\'', '\'\\)'],
-      values: {
-        faceBullshit: `\`${ fs.readFileSync(path.join(DIRNAME, 'FaceBullshit.user.css'), 'utf-8') }\`;\n`,
-      },
     }),
     metablock({
       order: [
@@ -69,4 +62,4 @@ export default [{
     file: 'dist/FμckFacebook.ios.user.js',
     format: 'iife',
   },
-}];
+}]);

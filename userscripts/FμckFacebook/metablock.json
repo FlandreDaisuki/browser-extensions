@@ -9,7 +9,7 @@
   "require": [
     "https://unpkg.com/winkblue@0.1.1/dist/winkblue.umd.js"
   ],
-  "version": "1.7.0",
+  "version": "1.8.0",
   "grant": [
     "GM_getValue",
     "GM.getValue",

@@ -1,13 +1,20 @@
 {
   "name": "my-browser-extensions",
-  "private": true,
   "type": "module",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=11.0.0"
+  },
   "scripts": {
     "build": "pnpm --filter './userscripts/*' run build",
-    "lint": "eslint userscripts --ext .js"
+    "lint": "eslint ."
   },
   "devDependencies": {
-    "@flandredaisuki/eslint-config": "^0.0.2",
-    "eslint": "^8.51.0"
+    "@flandredaisuki/eslint-config": "^1.0.1",
+    "eslint": "^9.39.5",
+    "rolldown": "^1.2.4",
+    "rollup-plugin-userscript-metablock": "^0.4.1"
   }
 }

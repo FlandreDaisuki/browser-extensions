@@ -1,4 +1,4 @@
-import { $, $findAll, $getValue, $html, $setValue, $style } from './common.js';
+import { $, $findAll, $getValue, $html, $setValue, $style } from '../common.js';
 
 /** @typedef {{name: string, query: string}} Memo */
 
@@ -30,15 +30,15 @@ const save = (value) => $setValue(NAMESPACE, value);
   inputsBoxEl.classList.add('🔱-input-box');
 
   const memoLinksEl = $html('<ul class="🔱-memo-links"></ul>');
-  if (!memoLinksEl){ return; }
+  if (!memoLinksEl) { return; }
 
   inputsBoxEl.insertAdjacentElement('afterend', memoLinksEl);
-  const loadAllMemos = async() => {
+  const loadAllMemos = async () => {
     const allMemos = await load();
     const memoListHtmlText = allMemos
       .map((memo) => `
       <li>
-        <a href="${ memo.query }">${ memo.name }</a>
+        <a href="${memo.query}">${memo.name}</a>
         <button class="🔱-memo-edit" type="button">🖊️</button>
         <button class="🔱-memo-delete" type="button">🚮</button>
       </li>`)
@@ -47,7 +47,7 @@ const save = (value) => $setValue(NAMESPACE, value);
     memoLinksEl.innerHTML = memoListHtmlText;
 
     /**  @param {MouseEvent} event */
-    const editMemo = async(event) => {
+    const editMemo = async (event) => {
       /** @type {HTMLElement | null} */
       const targetEl = event.target;
       if (!targetEl) { return; }
@@ -78,11 +78,11 @@ const save = (value) => $setValue(NAMESPACE, value);
       editEl.onclick = editMemo;
     });
 
-    const deleteMemo = async(event) => {
+    const deleteMemo = async (event) => {
       const deletingName = event.target.previousElementSibling.previousElementSibling.textContent;
 
       // eslint-disable-next-line no-alert
-      if (!confirm(`Really delete "${ deletingName }"?`)){ return; }
+      if (!confirm(`Really delete "${deletingName}"?`)) { return; }
 
       const allMemos = await load();
       await save(allMemos.filter((memo) => {
@@ -96,7 +96,7 @@ const save = (value) => $setValue(NAMESPACE, value);
   };
   loadAllMemos();
 
-  const onMemoClick = async() => {
+  const onMemoClick = async () => {
     const query = location.search;
     // eslint-disable-next-line no-alert
     const name = prompt('Type the name');

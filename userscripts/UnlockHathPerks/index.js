@@ -1,22 +1,19 @@
-
-import { $, $$, $el, $find, $html, $style, sleep } from './common.js';
+import { $, $$, $el, $find, $html, $style, sleep } from '../common.js';
 /* cSpell:ignore exhentai juicyads favcat searchnav favform */
-/* eslint-disable no-console */
 
 /** @type {{abg: boolean, mt: boolean, pe: boolean, fw: boolean}} */
 const uhpConfig = (() => {
-  const _conf = Object.assign({ abg: true, mt: true, pe: true, fw: false }, GM_getValue('uhp') );
+  const _conf = Object.assign({ abg: true, mt: true, pe: true, fw: false }, GM_getValue('uhp'));
   GM_setValue('uhp', _conf);
 
   return new Proxy(_conf, {
-    set(target, propertyKey, value){
+    set(target, propertyKey, value) {
       const r = Reflect.set(target, propertyKey, value);
       GM_setValue('uhp', _conf);
       return r;
     },
   });
 })();
-
 
 // #region Ads-Be-Gone
 if (uhpConfig.abg) {
@@ -26,21 +23,21 @@ if (uhpConfig.abg) {
 
 // #region More Thumbs
 if (uhpConfig.mt) {
-  (async() => {
+  (async () => {
     const u = new URL(location);
-    if (!location.pathname.startsWith('/g/')){ return; }
-    if (u.searchParams.get('report') === 'select'){ return; }
-    if (u.searchParams.get('act') === 'expunge'){ return; }
+    if (!location.pathname.startsWith('/g/')) { return; }
+    if (u.searchParams.get('report') === 'select') { return; }
+    if (u.searchParams.get('act') === 'expunge') { return; }
 
     const NEXT_PAGE_SELECTOR = '.ptt td:last-child > a';
     const IMAGE_PARENT_SELECTOR = '#gdt';
 
     const imgParentEl = $(IMAGE_PARENT_SELECTOR);
-    if (!imgParentEl){ return console.error('No imgParentEl'); }
+    if (!imgParentEl) { return console.error('No imgParentEl'); }
     imgParentEl.innerHTML = '';
 
     /** @param {string} initUrl */
-    async function *newPagedImgElsGen(initUrl) {
+    async function* newPagedImgElsGen(initUrl) {
       let url = initUrl;
       /** @type {HTMLElement[]} */
       let imgEls = [];
@@ -70,7 +67,7 @@ if (uhpConfig.mt) {
 
     const pagedImgEls = newPagedImgElsGen(location.href);
 
-    const replaceResult = async(ob) => {
+    const replaceResult = async (ob) => {
       const pagedImgElsResult = await pagedImgEls.next();
       if (pagedImgElsResult.done) {
         return ob.disconnect();
@@ -82,13 +79,14 @@ if (uhpConfig.mt) {
       }
     };
     let isIntersecting = false;
-    const ob = new IntersectionObserver(async(entries) => {
+    const ob = new IntersectionObserver(async (entries) => {
       isIntersecting = entries[0].isIntersecting;
       if (isIntersecting) {
         do {
           await replaceResult(ob);
           await sleep(300);
-        } while (isIntersecting);
+          if (!isIntersecting) { break; }
+        } while (true);
       }
     });
     ob.observe($('table.ptb'));
@@ -98,9 +96,9 @@ if (uhpConfig.mt) {
 
 // #region Page Enlargement
 if (uhpConfig.pe) {
-  (async() => {
-    if (! $('input[name="f_search"]')) { return; }
-    if (! $('.itg')) { return; }
+  (async () => {
+    if (!$('input[name="f_search"]')) { return; }
+    if (!$('.itg')) { return; }
 
     const isTableLayout = Boolean($('table.itg'));
 
@@ -108,14 +106,14 @@ if (uhpConfig.pe) {
     const IMAGE_PARENT_SELECTOR = isTableLayout ? 'table.itg > tbody' : 'div.itg';
 
     const imgParentEl = $(IMAGE_PARENT_SELECTOR);
-    if (!imgParentEl){ return console.error('No imgParentEl'); }
+    if (!imgParentEl) { return console.error('No imgParentEl'); }
     imgParentEl.innerHTML = '';
 
     const statusEl = $el('h1', { textContent: 'Loading...', id: '🔓-status' });
     $('table.ptb, .itg + .searchnav, #favform + .searchnav').replaceWith(statusEl);
 
     /** @param {string} initUrl */
-    async function *newPagedImgElsGen(initUrl) {
+    async function* newPagedImgElsGen(initUrl) {
       let url = initUrl;
       /** @type {HTMLElement[]} */
       let imgEls = [];
@@ -144,7 +142,7 @@ if (uhpConfig.pe) {
     }
 
     const pagedImgEls = newPagedImgElsGen(location.href);
-    const replaceResult = async(ob) => {
+    const replaceResult = async (ob) => {
       const pagedImgElsResult = await pagedImgEls.next();
       if (pagedImgElsResult.done) {
         statusEl.textContent = 'End';
@@ -155,13 +153,14 @@ if (uhpConfig.pe) {
       }
     };
     let isIntersecting = false;
-    const ob = new IntersectionObserver(async(entries) => {
+    const ob = new IntersectionObserver(async (entries) => {
       isIntersecting = entries[0].isIntersecting;
       if (isIntersecting) {
         do {
           await replaceResult(ob);
           await sleep(300);
-        } while (isIntersecting);
+          if (!isIntersecting) { break; }
+        } while (true);
       }
     });
     ob.observe(statusEl);

@@ -1,4 +1,4 @@
-import { $$, $getResourceText, $style } from './common.js';
+import { $$, $getResourceText, $style } from '../common.js';
 
 /* cSpell:ignoreRegExp \.[\w\d]{8}\b */
 /* cSpell:ignore posinset */
@@ -110,14 +110,13 @@ const sponsorWords = {
 /* eslint-enable */
 /* cSpell:enable */
 
-
 const FEED_ROOT_SELECTOR = '[role="feed"] > div, [role="article"], [aria-posinset]';
 
 winkblue.on('svg use', (svgUseEl) => {
   const sponsorSvgTextEls = $$('svg text').filter((textEl) => sponsorWords.includes(textEl.textContent));
 
   for (const sponsorSvgTextEl of sponsorSvgTextEls) {
-    if (svgUseEl.attributes['xlink:href'].value !== `#${ sponsorSvgTextEl.id }`) { continue; }
+    if (svgUseEl.attributes['xlink:href'].value !== `#${sponsorSvgTextEl.id}`) { continue; }
 
     const feedRootEl = svgUseEl.closest(FEED_ROOT_SELECTOR);
     if (!feedRootEl) { continue; }

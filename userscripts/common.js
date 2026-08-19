@@ -7,7 +7,7 @@ export const $$ = (selectors) => Array.from(document.querySelectorAll(selectors)
 
 export const $el = (tag, attr = {}, cb = noop) => {
   const el = document.createElement(tag);
-  if (typeof(attr) === 'string') {
+  if (typeof (attr) === 'string') {
     el.textContent = attr;
   }
   else {
@@ -25,21 +25,21 @@ export const $html = (htmlText) => {
 
 export const $style = (stylesheet) => $el('style', stylesheet, (el) => document.head.appendChild(el));
 
-export const $getValue = async(key, defaultValue) => {
+export const $getValue = async (key, defaultValue) => {
   if (globalThis.GM_getValue) {
     return globalThis.GM_getValue(key, defaultValue);
   }
-  else if (globalThis.GM.getValue){
-    return globalThis.GM.getValue( key, defaultValue );
+  else if (globalThis.GM.getValue) {
+    return globalThis.GM.getValue(key, defaultValue);
   }
 };
 
-export const $setValue = async(key, Value) => {
+export const $setValue = async (key, Value) => {
   if (globalThis.GM_setValue) {
     return globalThis.GM_setValue(key, Value);
   }
-  else if (globalThis.GM.setValue){
-    return globalThis.GM.setValue( key, Value );
+  else if (globalThis.GM.setValue) {
+    return globalThis.GM.setValue(key, Value);
   }
 };
 
@@ -47,8 +47,8 @@ export const $getResourceText = (key) => {
   if (globalThis.GM_getResourceText) {
     return globalThis.GM_getResourceText(key);
   }
-  else if (globalThis.GM.getResourceText){
-    return globalThis.GM.getResourceText( key );
+  else if (globalThis.GM.getResourceText) {
+    return globalThis.GM.getResourceText(key);
   }
 };
 
@@ -60,7 +60,7 @@ export const $xhr = (details) => {
 export const throttle = (fn, timeout = 1000) => {
   let locked = false;
   return (...args) => {
-    if (!locked){
+    if (!locked) {
       locked = true;
       fn(...args);
       setTimeout(() => {
