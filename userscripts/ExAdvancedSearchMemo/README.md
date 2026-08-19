@@ -1,5 +1,7 @@
 # ExAdvancedSearchMemo
 
+[Install userscript](https://flandredaisuki.github.io/My-Browser-Extensions/ex-advanced-search-memo.user.js)
+
 ## Usage
 
 |Set your query & click `Memo`|![usage step 1](https://raw.githubusercontent.com/FlandreDaisuki/My-Browser-Extensions/main/userscripts/ExAdvancedSearchMemo/usage_1.jpg)|

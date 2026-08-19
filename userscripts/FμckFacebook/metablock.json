@@ -19,7 +19,7 @@
     "GM.getResourceText"
   ],
   "resource": {
-    "faceBullshit": "https://raw.githubusercontent.com/FlandreDaisuki/My-Browser-Extensions/main/userscripts/F%CE%BCckFacebook/FaceBullshit.user.css"
+    "faceBullshit": "https://flandredaisuki.github.io/My-Browser-Extensions/face-bullshit.user.css"
   },
   "noframes": true,
   "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",

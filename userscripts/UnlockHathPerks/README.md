@@ -2,6 +2,8 @@
 
 <img src="UnlockHathPerks.png" width="200">
 
+[Install userscript](https://flandredaisuki.github.io/My-Browser-Extensions/unlock-hath-perks.user.js)
+
 - [Unlock Hath Perks](#unlock-hath-perks)
   - [解鎖 Hath Perks \[中文\]](#解鎖-hath-perks-中文)
     - [Ads-Be-Gone](#ads-be-gone)

@@ -6,6 +6,7 @@ import { replacePlugin } from 'rolldown/plugins';
 import metablock from 'rollup-plugin-userscript-metablock';
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
+const DISTRIBUTION_BASE_URL = 'https://flandredaisuki.github.io/My-Browser-Extensions';
 
 export default defineConfig([{
   input: './index.js',
@@ -24,6 +25,10 @@ export default defineConfig([{
         'homepageURL',
         'license',
       ],
+      override: {
+        downloadURL: `${DISTRIBUTION_BASE_URL}/fuck-facebook.user.js`,
+        updateURL: `${DISTRIBUTION_BASE_URL}/fuck-facebook.user.js`,
+      },
     }),
   ],
 
@@ -56,6 +61,10 @@ export default defineConfig([{
         'homepageURL',
         'license',
       ],
+      override: {
+        downloadURL: `${DISTRIBUTION_BASE_URL}/fuck-facebook-ios.user.js`,
+        updateURL: `${DISTRIBUTION_BASE_URL}/fuck-facebook-ios.user.js`,
+      },
     }),
   ],
   output: {

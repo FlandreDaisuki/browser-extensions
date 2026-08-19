@@ -1,0 +1,79 @@
+name: CI and deploy userscripts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        # aka actions/checkout@v7.0.1
+
+      - name: Set up pnpm and Node.js
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2
+        # aka pnpm/setup@v2.0.2
+        with:
+          cache: true
+          install: false
+          runtime: node@24
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Prepare distribution
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          mkdir -p .pages
+          install -m 0644 pages/index.html .pages/index.html
+          install -m 0644 userscripts/ExAdvancedSearchMemo/dist/ExAdvancedSearchMemo.user.js .pages/ex-advanced-search-memo.user.js
+          install -m 0644 'userscripts/FμckFacebook/dist/FμckFacebook.user.js' .pages/fuck-facebook.user.js
+          install -m 0644 'userscripts/FμckFacebook/dist/FμckFacebook.ios.user.js' .pages/fuck-facebook-ios.user.js
+          install -m 0644 'userscripts/FμckFacebook/FaceBullshit.user.css' .pages/face-bullshit.user.css
+          install -m 0644 userscripts/UnlockHathPerks/dist/UnlockHathPerks.user.js .pages/unlock-hath-perks.user.js
+          touch .pages/.nojekyll
+
+      - name: Configure GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+        # aka actions/configure-pages@v6.0.0
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        # aka actions/upload-pages-artifact@v5.0.0
+        with:
+          path: .pages
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
+        # aka actions/deploy-pages@v5.0.0

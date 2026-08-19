@@ -14,6 +14,8 @@
     "GM_setValue",
     "GM.setValue"
   ],
+  "updateURL": "https://flandredaisuki.github.io/My-Browser-Extensions/ex-advanced-search-memo.user.js",
+  "downloadURL": "https://flandredaisuki.github.io/My-Browser-Extensions/ex-advanced-search-memo.user.js",
   "supportURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/issues",
   "homepageURL": "https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/main/userscripts/ExAdvancedSearchMemo/README.md"
 }
