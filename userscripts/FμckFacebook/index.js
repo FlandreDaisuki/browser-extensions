@@ -112,6 +112,17 @@ const sponsorWords = {
 
 const FEED_ROOT_SELECTOR = '[role="feed"] > div, [role="article"], [aria-posinset]';
 
+/* Feature 2: 刪掉未追蹤粉專與未加入社團的推薦貼文 */
+
+winkblue.on('[aria-posinset] h4 [role="button"]', (recommendationActionEl) => {
+  const feedRootEl = recommendationActionEl.closest(FEED_ROOT_SELECTOR);
+  if (!feedRootEl) { return; }
+
+  /* eslint-disable-next-line no-console */
+  console.count('🖕📘 NO_RECOMMENDATIONS');
+  feedRootEl.hidden = true;
+});
+
 winkblue.on('svg use', (svgUseEl) => {
   const sponsorSvgTextEls = $$('svg text').filter((textEl) => sponsorWords.includes(textEl.textContent));
 
